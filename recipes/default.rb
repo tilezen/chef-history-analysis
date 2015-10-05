@@ -2,7 +2,7 @@
 # Cookbook Name:: history-analysis
 # Recipe:: default
 #
-# Copyright 2015, YOUR_COMPANY_NAME
+# Copyright 2015, Mapzen
 #
-# All rights reserved - Do Not Redistribute
+# Available under the GNU GPLv3, see LICENSE for more details.
 #
