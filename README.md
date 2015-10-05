@@ -1,2 +1,4 @@
-# chef-history-analysis
-Chef setup for OSM history analysis VMs.
+History Analysis Cookbook
+=========================
+
+A cookbook to set up a machine to do OSM history analysis work; this means installing all the tools to do OSM history analysis.
