@@ -11,6 +11,8 @@ recipe 'history-analysis', 'Mapzen History Analysis'
 %w(
   apt
   git
+  sudo
+  ohai
 ).each do |dep|
   depends dep
 end
