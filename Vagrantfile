@@ -8,6 +8,11 @@ Vagrant.require_version '>= 1.5.0'
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.hostname = 'history-analysis'
 
+  # osmium-tool takes plenty RAM to compile
+  config.vm.provider "virtualbox" do |vb|
+    vb.memory = "1024"
+  end
+
   config.omnibus.chef_version = '11.12.8'
   config.berkshelf.enabled = true
 
@@ -17,8 +22,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.box = 'ubuntu-14.04-opscode'
   config.vm.box_url = 'http://opscode-vm-bento.s3.amazonaws.com/vagrant/virtualbox/opscode_ubuntu-14.04_chef-provisionerless.box'
-
-  config.vm.network "forwarded_port", guest: 8080, host: 8080
 
   config.vm.provision 'chef_solo' do |chef|
   chef.json = {
@@ -34,7 +37,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   }
   chef.run_list = [
     'recipe[sudo]',
+    'recipe[apt]',
     'recipe[ohai]',
+    'recipe[history-analysis::default]'
   ]
   end
 end
