@@ -30,7 +30,7 @@ end
 execute "split-planet" do
   action :nothing
   subscribes :run, "template[#{dstdir}/splitter.config]", :delayed
-  subscribes :run, "s3_file[#{dstdir}/planet.osh.pbf]", :delayed
+  subscribes :run, "run[download-planet]", :delayed
   command "LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/osm-history-splitter 'planet.osh.pbf' 'splitter.config'"
   cwd dstdir
 end
