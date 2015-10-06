@@ -8,6 +8,8 @@
 #
 
 dstdir = node[:history_splitter][:dstdir]
+bucket = node[:history_splitter][:planet_bucket]
+path = node[:history_splitter][:planet_file_name]
 
 directory dstdir do
   action :create
@@ -16,13 +18,10 @@ directory dstdir do
   mode "0755"
 end
 
-s3_file "#{dstdir}/planet.osh.pbf" do
-  remote_path node[:history_splitter][:planet_file_name]
-  bucket node[:history_splitter][:planet_bucket]
-  owner "root"
-  group "root"
-  mode "0644"
-  action :create
+execute "download-planet" do
+  command "wget -O planet.osh.pbf 'http://s3.amazonaws.com/#{bucket}#{path}'"
+  cwd destdir
+  not_if File.exist?("#{destdir}/planet.osh.pbf")
 end
 
 template "#{dstdir}/splitter.config" do
