@@ -19,7 +19,7 @@ directory dstdir do
 end
 
 execute "download-planet" do
-  command "wget -O planet.osh.pbf 'http://s3.amazonaws.com/#{bucket}#{path}'"
+  command "wget -q -O planet.osh.pbf 'http://s3.amazonaws.com/#{bucket}#{path}'"
   cwd dstdir
   not_if { File.exist?("#{dstdir}/planet.osh.pbf") }
 end
