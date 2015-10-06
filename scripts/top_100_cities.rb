@@ -119,13 +119,15 @@ cities['regions'].each do |rname, region|
   end
 end
 
-data = Hash.new
-top_100.each do |name, total, unique, interesting|
-  normalised_name = name.downcase.gsub(/[^a-z]+/, "_")
+top_100.shuffle.each_slice(17) do |slice|
+  data = Hash.new
+  slice.each do |name, total, unique, interesting|
+    normalised_name = name.downcase.gsub(/[^a-z]+/, "_")
 
-  unless cities_lookup[normalised_name].nil?
-    data[normalised_name] = cities_lookup[normalised_name]
+    unless cities_lookup[normalised_name].nil?
+      data[normalised_name] = cities_lookup[normalised_name]
+    end
   end
-end
 
-puts JSON.dump(data)
+  puts JSON.dump({'history_splitter' => { 'locations' => data } })
+end
