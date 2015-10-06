@@ -20,8 +20,8 @@ end
 
 execute "download-planet" do
   command "wget -O planet.osh.pbf 'http://s3.amazonaws.com/#{bucket}#{path}'"
-  cwd destdir
-  not_if { File.exist?("#{destdir}/planet.osh.pbf") }
+  cwd dstdir
+  not_if { File.exist?("#{dstdir}/planet.osh.pbf") }
 end
 
 template "#{dstdir}/splitter.config" do
