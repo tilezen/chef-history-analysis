@@ -1,0 +1,3 @@
+<% node[:history_splitter][:locations].each do |name,bbox| %>
+<%= name %>.osh.pbf BBOX <%= bbox.join(',') %>
+<% end %>

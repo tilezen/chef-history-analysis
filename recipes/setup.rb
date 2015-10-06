@@ -30,7 +30,7 @@
   package p
 end
 
-base_srcdir = "/usr/local/source"
+base_srcdir = node[:history_splitter][:srcdir]
 osmium_srcdir = "#{base_srcdir}/osmium"
 osm_binary_srcdir = "#{base_srcdir}/osm-binary"
 osm_history_splitter_srcdir = "#{base_srcdir}/osm-history-splitter"

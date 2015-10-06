@@ -13,6 +13,7 @@ recipe 'history-analysis', 'Mapzen History Analysis'
   git
   sudo
   ohai
+  s3_file
 ).each do |dep|
   depends dep
 end
