@@ -62,6 +62,9 @@ for year in years:
 
     results[year] = year_results
 
+    # need to close connection before it can be dropped
+    conn.close()
+
     # drop database to reclaim disk space
     run("dropdb --if-exists %s" % safe_name)
 
