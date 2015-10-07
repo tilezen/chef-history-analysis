@@ -37,6 +37,10 @@ osm_history_splitter_srcdir = "#{base_srcdir}/osm-history-splitter"
 libosmium_srcdir = "#{base_srcdir}/libosmium"
 osmium_tool_srcdir = "#{base_srcdir}/osmium-tool"
 
+user "analysis" do
+  comment "A user for doing the analysis"
+end
+
 # source dir
 directory base_srcdir do
   action :create

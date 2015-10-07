@@ -1,0 +1,59 @@
+import subprocess
+import sys
+import psycopg2
+import re
+import json
+import yaml
+
+osm2pgsql_bin = '<%= default[:history_splitter][:srcdir] + '/osm2pgsql/osm2pgsql' %>'
+osm2pgsql_style = '<%= default[:history_splitter][:dstdir] + '/default.style' %>'
+osmium_tool_bin = '/usr/local/bin/osmium'
+years = range(2008, 2016)
+filestem = sys.argv[1]
+user = 'root'
+queries_file = '<%= default[:history_splitter][:dstdir] + '/home/matt/Downloads/history/osm-analysis.yaml' %>'
+
+def run(cmd):
+    try:
+        subprocess.check_output(cmd, stderr=subprocess.STDOUT, shell=True)
+    except subprocess.CalledProcessError, e:
+        print>>sys.stderr, "EXCEPTION: %s\nOUTPUT:\n%s" % (str(e), e.output)
+        raise e
+
+queries = yaml.load(open(queries_file, 'r'))
+
+for year in years:
+    # creat the database and set it up for import
+    safe_name = "%s_%d" % (filestem, year)
+    run("dropdb --if-exists %s" % safe_name)
+    run("createdb -E UTF-8 -O %s %s" % (user, safe_name))
+    conn = psycopg2.connect("dbname=%s" % safe_name)
+    cur = conn.cursor()
+    cur.execute("create extension postgis")
+    cur.execute("create extension hstore")
+    cur.close()
+    conn.commit()
+
+    # extract the snapshot at new year
+    run("rm -f %s.osm.pbf" % safe_name)
+    run("%s time-filter -o %s.osm.pbf %s.osh.pbf %d-01-01T00:00:00Z" % (osmium_tool_bin, safe_name, filestem, year))
+
+    # import it into the database
+    run("%s -S %s -d %s -G -x -k -K -U %s %s.osm.pbf" % (osm2pgsql_bin, osm2pgsql_style, safe_name, user, safe_name))
+
+    # run queries
+    cur = conn.cursor()
+    results = dict()
+    for name, query in queries.iteritems():
+        cur.execute(query)
+        if len(cur.description) == 1 and cur.rowcount == 1:
+            results[name] = cur.fetchone()[0]
+        else:
+            r = list()
+            names = [d[0] for d in cur.description]
+            for row in cur.fetchall():
+                r.append(dict(zip(names, row)))
+                results[name] = r
+
+    with open("%s.json" % safe_name, 'w') as fh:
+        json.dump(results, fh)
