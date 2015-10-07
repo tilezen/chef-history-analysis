@@ -1,7 +1,7 @@
 ﻿---
 # Road length for new roads and edits to existing roads
 km_new_roads: >-
-    SELECT sum(ST_Length(way))/1000 AS km_new_roads
+    SELECT sum(ST_Length(${geom}))/1000 AS km_new_roads
     FROM planet_osm_line where highway in
       ('motorway', 'motorway_link', 'trunk', 'trunk_link',
        'primary', 'primary_link', 'secondary', 'secondary_link',
@@ -10,7 +10,7 @@ km_new_roads: >-
        'living_street')
     and osm_version = '1' and osm_id > 0
 km_edits_to_existing_roads: >-
-    SELECT sum(ST_Length(way))/1000 AS km_edits_to_existing_roads
+    SELECT sum(ST_Length(${geom}))/1000 AS km_edits_to_existing_roads
     FROM planet_osm_line where highway in
       ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary',
        'primary_link', 'secondary', 'secondary_link', 'residential',
@@ -20,9 +20,9 @@ km_edits_to_existing_roads: >-
 # Road length for new roads with names and road length for edits to
 # existing road segments with names
 km_new_named_roads: >-
-    SELECT sum(ST_Length(way))/1000 AS km_new_named_roads FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and name is not null and osm_version = '1' and osm_id > 0
+    SELECT sum(ST_Length(${geom}))/1000 AS km_new_named_roads FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and name is not null and osm_version = '1' and osm_id > 0
 km_edits_to_existing_named_roads: >-
-    SELECT sum(ST_Length(way))/1000 AS km_edits_to_existing_named_roads FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and name is not null and osm_version > '1' and osm_id > 0 
+    SELECT sum(ST_Length(${geom}))/1000 AS km_edits_to_existing_named_roads FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and name is not null and osm_version > '1' and osm_id > 0 
 # Count of new road segments and edits to existing road segments
 new_road_segments: >-
     select osm_version, count(osm_version) as NewRoad_Segments from planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and osm_version = '1' and osm_id > 0 group by osm_version
@@ -32,12 +32,12 @@ total_road_segments: >-
     select count(*) from planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street')
 # Road length of oneway roads, new and edits to existing oneway roads
 km_new_oneways: >-
-    SELECT sum(ST_Length(way))/1000 AS km_new_oneways FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and osm_version = '1' and (oneway = 'yes' or oneway = '-1') and osm_id > 0
+    SELECT sum(ST_Length(${geom}))/1000 AS km_new_oneways FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and osm_version = '1' and (oneway = 'yes' or oneway = '-1') and osm_id > 0
 km_edits_to_existing_oneways: >-
-    SELECT sum(ST_Length(way))/1000 AS km_edits_to_existing_oneways FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and osm_version > '1' and (oneway = 'yes' or oneway = '-1') and osm_id > 0
+    SELECT sum(ST_Length(${geom}))/1000 AS km_edits_to_existing_oneways FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and osm_version > '1' and (oneway = 'yes' or oneway = '-1') and osm_id > 0
 # Road length edits by editor
 km_edits_per_editor: >-
-    select osm_user, sum(ST_Length(way))/1000 AS km_edits_per_editor FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and osm_id > 0 group by osm_user order by km_edits_per_editor desc
+    select osm_user, sum(ST_Length(${geom}))/1000 AS km_edits_per_editor FROM planet_osm_line where highway in ('motorway', 'motorway_link', 'trunk', 'trunk_link', 'primary', 'primary_link', 'secondary', 'secondary_link', 'residential', 'residential_link', 'service', 'tertiary', 'tertiary_link', 'road', 'track', 'unclassified', 'living_street') and osm_id > 0 group by osm_user order by km_edits_per_editor desc
 # Count of buildings  
 building_count: >-
     SELECT COUNT (*) FROM planet_osm_polygon where building is not null and building != 'no' and osm_id > 0
@@ -50,7 +50,7 @@ building_address_count: >-
 
 # Total area of buildings
 building_area: >-
-    SELECT sum(ST_Area(way)/1000) as buildingAreaSqKm from planet_osm_polygon where building is not null and building != 'no' and osm_id > 0
+    SELECT sum(ST_Area(${geom})/1000) as buildingAreaSqKm from planet_osm_polygon where building is not null and building != 'no' and osm_id > 0
 # Count of building editors
 building_editors: >-
     select osm_user, count(osm_user) as Buildings_Edited from planet_osm_polygon where building is not null and building != 'no' and osm_id > 0 group by osm_user order by Buildings_Edited desc
@@ -219,16 +219,16 @@ aerialway_count: >-
 
 # total area of polygonal inland water features
 inland_water_area: >-
-    SELECT sum(ST_Area(way)/1000) as InlandWaterSqKm from planet_osm_polygon where waterway is not null and waterway != 'no' and osm_id > 0
+    SELECT sum(ST_Area(${geom})/1000) as InlandWaterSqKm from planet_osm_polygon where waterway is not null and waterway != 'no' and osm_id > 0
 
 # total length of linear inland water features
 inland_water_length: >-
-    SELECT sum(ST_Length(way))/1000 AS km_InlandWater FROM planet_osm_line where waterway is not null and waterway != 'no' and osm_id > 0
+    SELECT sum(ST_Length(${geom}))/1000 AS km_InlandWater FROM planet_osm_line where waterway is not null and waterway != 'no' and osm_id > 0
 
 # Can the inland water polygons be labeled?
 inland_water_area_named: >-
-    select sum(ST_Area(way)/1000) as InlandWaterSqKm_named from planet_osm_polygon where waterway is not null and name is not null and waterway != 'no' and osm_id > 0
+    select sum(ST_Area(${geom})/1000) as InlandWaterSqKm_named from planet_osm_polygon where waterway is not null and name is not null and waterway != 'no' and osm_id > 0
 
 # Can the inland water linear features by labeled?
 inland_water_length_named: >-
-    SELECT sum(ST_Length(way))/1000 AS km_InlandWater_named FROM planet_osm_line where waterway is not null and name is not null and waterway != 'no' and osm_id > 0
+    SELECT sum(ST_Length(${geom}))/1000 AS km_InlandWater_named FROM planet_osm_line where waterway is not null and name is not null and waterway != 'no' and osm_id > 0
