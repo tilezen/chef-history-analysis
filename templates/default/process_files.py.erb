@@ -22,6 +22,7 @@ def run(cmd):
 
 queries = yaml.load(open(queries_file, 'r'))
 
+results = dict()
 for year in years:
     # creat the database and set it up for import
     safe_name = "%s_%d" % (filestem, year)
@@ -43,17 +44,19 @@ for year in years:
 
     # run queries
     cur = conn.cursor()
-    results = dict()
+    year_results = dict()
     for name, query in queries.iteritems():
         cur.execute(query)
         if len(cur.description) == 1 and cur.rowcount == 1:
-            results[name] = cur.fetchone()[0]
+            year_results[name] = cur.fetchone()[0]
         else:
             r = list()
             names = [d[0] for d in cur.description]
             for row in cur.fetchall():
                 r.append(dict(zip(names, row)))
-            results[name] = r
+            year_results[name] = r
 
-    with open("%s.json" % safe_name, 'w') as fh:
-        json.dump(results, fh)
+    results[year] = year_results
+
+with open("%s.json" % filestem, 'w') as fh:
+    json.dump(results, fh)
