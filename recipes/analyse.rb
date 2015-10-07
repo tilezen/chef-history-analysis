@@ -60,10 +60,16 @@ execute "osm2pgsql-make-install" do
 end
 
 execute "make-pg-superuser" do
-  command "createuser -s analysis && touch #{dstdir}/.created_pg_user"
+  command "createuser -s analysis"
   user "postgres"
   cwd dstdir
   not_if { File.exist? "#{dstdir}/.created_pg_user" }
+end
+
+file "#{dstdir}/.created_pg_user" do
+  action :touch
+  user "analysis"
+  mode "0644"
 end
 
 cookbook_file "#{node[:history_splitter][:dstdir]}/default.style" do
