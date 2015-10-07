@@ -29,8 +29,10 @@ end
 
 execute "split-planet" do
   action :nothing
-  subscribes :run, "template[#{dstdir}/splitter.config]", :delayed
-  subscribes :run, "run[download-planet]", :delayed
+  # This takes too long to run, unfortunately, and times out. It might
+  # be better, since this is a one-off process, to run it manually.
+  #subscribes :run, "template[#{dstdir}/splitter.config]", :delayed
+  #subscribes :run, "run[download-planet]", :delayed
   command "LD_LIBRARY_PATH=/usr/local/lib /usr/local/bin/osm-history-splitter 'planet.osh.pbf' 'splitter.config'"
   cwd dstdir
 end
