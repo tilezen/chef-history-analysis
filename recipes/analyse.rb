@@ -50,28 +50,28 @@ execute "make-pg-superuser" do
   not_if { File.exist? "#{dstdir}/.created_pg_user" }
 end
 
-cookbook_file "#{default[:history_splitter][:dstdir]}/default.style" do
+cookbook_file "#{node[:history_splitter][:dstdir]}/default.style" do
   source "default.style"
   user "analysis"
   group "users"
   mode "0644"
 end
 
-cookbook_file "#{default[:history_splitter][:dstdir]}/osm-analysis.yaml" do
+cookbook_file "#{node[:history_splitter][:dstdir]}/osm-analysis.yaml" do
   source "osm-analysis.yaml"
   user "analysis"
   group "users"
   mode "0644"
 end
 
-template "#{default[:history_splitter][:dstdir]}/process_files.py" do
+template "#{node[:history_splitter][:dstdir]}/process_files.py" do
   source "process_files.py.erb"
   user "analysis"
   group "users"
   mode "0644"
 end
 
-template "#{default[:history_splitter][:dstdir]}/process_all_files.sh" do
+template "#{node[:history_splitter][:dstdir]}/process_all_files.sh" do
   source "process_all_files.sh.erb"
   user "analysis"
   group "users"
