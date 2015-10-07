@@ -25,7 +25,7 @@ def run(cmd):
 queries = yaml.load(open(queries_file, 'r'))
 
 results = dict()
-bbox = "st_transform(st_setstrid(st_makebox2d(st_makepoint(%f,%f),st_makepoint(%f,%f)),4326),900913)" % bbox
+bbox = "st_transform(st_setsrid(st_makebox2d(st_makepoint(%f,%f),st_makepoint(%f,%f)),4326),900913)" % bbox
 for year in years:
     # creat the database and set it up for import
     safe_name = "%s_%d" % (filestem, year)
