@@ -5,13 +5,13 @@ import re
 import json
 import yaml
 
-osm2pgsql_bin = '<%= default[:history_splitter][:srcdir] + '/osm2pgsql/osm2pgsql' %>'
-osm2pgsql_style = '<%= default[:history_splitter][:dstdir] + '/default.style' %>'
+osm2pgsql_bin = '<%= node[:history_splitter][:srcdir] + '/osm2pgsql/osm2pgsql' %>'
+osm2pgsql_style = '<%= node[:history_splitter][:dstdir] + '/default.style' %>'
 osmium_tool_bin = '/usr/local/bin/osmium'
 years = range(2008, 2016)
 filestem = sys.argv[1]
 user = 'root'
-queries_file = '<%= default[:history_splitter][:dstdir] + '/queries.yaml' %>'
+queries_file = '<%= node[:history_splitter][:dstdir] + '/queries.yaml' %>'
 
 def run(cmd):
     try:
