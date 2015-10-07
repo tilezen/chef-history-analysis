@@ -79,8 +79,8 @@ cookbook_file "#{node[:history_splitter][:dstdir]}/default.style" do
   mode "0644"
 end
 
-cookbook_file "#{node[:history_splitter][:dstdir]}/osm-analysis.yaml" do
-  source "osm-analysis.yaml"
+cookbook_file "#{node[:history_splitter][:dstdir]}/queries.yaml" do
+  source "queries.yaml"
   user "analysis"
   group "users"
   mode "0644"
