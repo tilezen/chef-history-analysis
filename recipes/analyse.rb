@@ -17,9 +17,25 @@ osm2pgsql_srcdir = "#{srcdir}/osm2pgsql"
   postgresql-9.3-postgis-2.1
   python-psycopg2
   python-yaml
+  autoconf
+  automake
+  libtool
+  make
+  g++
+  pkg-config
+  libboost-dev
+  libboost-system-dev
+  libboost-filesystem-dev
+  libboost-thread-dev
+  libexpat1-dev
+  libgeos-dev
+  libgeos++-dev
+  libpq-dev
+  libbz2-dev
+  libproj-dev
+  zlib1g-dev
   lua5.2
   liblua5.2-dev
-  libboost-thread-dev
 ).each do |p|
   package p
 end
