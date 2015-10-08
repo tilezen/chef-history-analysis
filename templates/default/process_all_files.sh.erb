@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 <% node[:history_splitter][:locations].each do |name,bbox| %>
-python ./process_files.py <%= name %> <%= bbox.join(',') %>
+python ./process_files.py <%= name %> <%= bbox.join(',') %> 2>&1 | tee -a process.log
 <% end %>
