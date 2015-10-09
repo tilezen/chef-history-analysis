@@ -43,7 +43,7 @@ for year in years:
     run("%s time-filter -o %s.osm.pbf %s.osh.pbf %d-01-01T00:00:00Z" % (osmium_tool_bin, safe_name, filestem, year))
 
     # import it into the database
-    run("%s -S %s -d %s -G -x -k -K -U %s %s.osm.pbf" % (osm2pgsql_bin, osm2pgsql_style, safe_name, user, safe_name))
+    run("%s -C 4096 -S %s -d %s -G -x -k -K -U %s %s.osm.pbf" % (osm2pgsql_bin, osm2pgsql_style, safe_name, user, safe_name))
 
     # run queries
     cur = conn.cursor()
@@ -67,6 +67,8 @@ for year in years:
 
     # drop database to reclaim disk space
     run("dropdb --if-exists %s" % safe_name)
+    # delete year file to reclaim disk space
+    run("rm -f %s.osm.pbf" % safe_name)
 
 with open("%s.json" % filestem, 'w') as fh:
     json.dump(results, fh)
